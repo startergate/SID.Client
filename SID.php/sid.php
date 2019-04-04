@@ -76,7 +76,7 @@
                   "password" => $pw,
                   "isAuth" => false,
                   "isAuthOn" => false,
-                  "isWeb" => true,
+                  "isWeb" => true
               )));
               $userdata = json_decode($userdata)
               if ($userdata['type'] === 'error') {
@@ -98,14 +98,15 @@
       public function logout($clientid, $sessid)
       {
           $userdata = curlPost('http://localhost:3000/api/logout', json_encode(array(
-              "type" => "login",
+              "type" => "logout",
               "clientid" => $clientid,
               "sessid" => $sessid
           )));
+          $userdata = json_decode($userdata)
           if ($userdata['type'] === 'error') {
               return 0;
           }
-          if ($userdata['is_succeed'] === false) {
+          if (!$userdata['is_succeed']) {
               return 0;
           }
           session_destroy();
@@ -120,37 +121,22 @@
 
       public function register(String $id, String $pw, String $nickname = 'User')
       {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-          $id = $conn->real_escape_string($id);
-          $nickname = $conn->real_escape_string($nickname);
-          if ($this->checkExist('userdata', 'id', $id) === 1) {
-              return -1;
-          }
-          if ($nickname === '') {
-              $nickname = $_POST['id'];
-          }
-          $pid = $id.$pw.$id;
-          $pw = hash('sha256', $pw);
-          do {
-              $pid = md5($pid);
-              $checkExist = $this->checkExist('userdata', 'pid', $pid);
-          } while ($checkExist === 1);
-
           try {
-              $sql = "INSERT INTO userdata (id,pw,nickname,register_date,pid) VALUES('".$id."','".$pw."','".$nickname."',now(),'".$pid."')";
-              $conn->query($sql);
-
-              $sql = "SELECT * FROM userdata WHERE pid LIKE '$pid'";
-              $result = $conn->query($sql);
-              $row = $result->fetch_assoc();
-              if ($row['pid']) {
-                  $sql = 'INSERT INTO '.$this->clientName."_additional (pid) VALUES ('".$pid."')";
-                  $conn->query($sql);
-
-                  return $pid;
-              } else {
+              $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
+                  "type" => "register",
+                  "clientid" => $clientid,
+                  "userid" => $id,
+                  "nickname" => $nickname,
+                  "password" => $pw
+              )));
+              $userdata = json_decode($userdata)
+              if ($userdata['type'] === 'error') {
                   return 0;
               }
+              if (!$userdata['is_succeed']) {
+                  return 0;
+              }
+              return $userdata['private_id'];
           } catch (\Exception $e) {
               return -1;
           }
