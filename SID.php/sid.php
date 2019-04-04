@@ -95,10 +95,23 @@
           }
       }
 
-      public function logout()
+      public function logout($clientid, $sessid)
       {
+          $userdata = curlPost('http://localhost:3000/api/logout', json_encode(array(
+              "type" => "login",
+              "clientid" => $clientid,
+              "sessid" => $sessid
+          )));
+          if ($userdata['type'] === 'error') {
+              return 0;
+          }
+          if ($userdata['is_succeed'] === false) {
+              return 0;
+          }
           session_destroy();
 
+
+          // legacy support
           setcookie('sidAutorizeRikka', 0, time() - 3600, '/');
           setcookie('sidAutorizeYuuta', 0, time() - 3600, '/');
 
