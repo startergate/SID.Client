@@ -143,19 +143,23 @@
       }
 
       // User Info Getter
-      public function getUserNickname($pid)
+      public function getUserNickname($clientid, $sessid)
       {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-
           try {
-              $sql = 'SELECT nickname FROM userdata WHERER pid = "'.$pid.'"';
-              $result = $conn->query($sql);
-              $row = $result->fetch_assoc();
-              if ($row) {
-                  return $row['nickname'];
-              } else {
+              $userdata = curlPost('http://localhost:3000/api/get/usname', json_encode(array(
+                  "type" => "get",
+                  "data" => 'usname',
+                  "clientid" => $clientid,
+                  "sessid" => $sessid
+              )));
+              $userdata = json_decode($userdata)
+              if ($userdata['type'] === 'error') {
                   return '';
               }
+              if (!$userdata['isvaild']) {
+                  return '';
+              }
+              return $userdata['response_data'];
           } catch (\Exception $e) {
               return '';
           }
