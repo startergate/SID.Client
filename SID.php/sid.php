@@ -74,8 +74,7 @@
                   "clientid" => $clientid,
                   "userid" => $id,
                   "password" => $pw,
-                  "isAuth" => false,
-                  "isAuthOn" => false,
+                  "isPermanent" => $isPermanent,
                   "isWeb" => true
               )));
               $userdata = json_decode($userdata)
