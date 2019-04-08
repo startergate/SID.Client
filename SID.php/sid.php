@@ -81,7 +81,6 @@
               if ($userdata['type'] === 'error') {
                   return 0;
               }
-              $sqlpid = $userdata['pid'];
               $output = 1;
               $_SESSION['sid_sessid'] = $userdata['requested_data'][0];
               $_SESSION['sid_pid'] = $userdata['requested_data'][1];
@@ -109,7 +108,6 @@
               return 0;
           }
           session_destroy();
-
 
           // legacy support
           setcookie('sidAutorizeRikka', 0, time() - 3600, '/');
@@ -186,23 +184,28 @@
           return $cookieTest1 && $cookieTest2;
       }
 
-      public function authCheck()
+      public function authCheck($clientid, $sessid)
       {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-          $returnRes = 0;
-          if (!empty($_COOKIE['sidAutorizeRikka'])) {
-              $sql = "SELECT pw,nickname,pid FROM userdata WHERE autorize_tag = '".$_COOKIE['sidAutorizeRikka']."'";
-              $result = $conn->query($sql);
-              $row = $result->fetch_assoc();
-              $pw_hash = hash('sha256', $row['pw']);
-              if ($pw_hash === $_COOKIE['sidAutorizeYuuta']) {
-                  $_SESSION['nickname'] = $row['nickname'];
-                  $_SESSION['pid'] = $row['pid'];
-                  $returnRes++;
+          try {
+              $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
+                  "type" => "login",
+                  "clientid" => $clientid,
+                  "sessid" => $sessid
+              )));
+              $userdata = json_decode($userdata)
+              if ($userdata['type'] === 'error') {
+                  return 0;
               }
-          }
+              $output = 1;
+              $_SESSION['sid_sessid'] = $userdata['requested_data'][0];
+              $_SESSION['sid_pid'] = $userdata['requested_data'][1];
+              $_SESSION['sid_nickname'] = strip_tags($userdata['requested_data'][2]);
 
-          return $returnRes;
+              return 1;
+
+          } catch (\Exception $e) {
+              return -1;
+          }
       }
 
       // Information editor
