@@ -186,26 +186,26 @@
 
       public function authCheck($clientid, $sessid)
       {
-          try {
-              $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
-                  "type" => "login",
-                  "clientid" => $clientid,
-                  "sessid" => $sessid
-              )));
-              $userdata = json_decode($userdata)
-              if ($userdata['type'] === 'error') {
-                  return 0;
-              }
-              $output = 1;
-              $_SESSION['sid_sessid'] = $userdata['requested_data'][0];
-              $_SESSION['sid_pid'] = $userdata['requested_data'][1];
-              $_SESSION['sid_nickname'] = strip_tags($userdata['requested_data'][2]);
+        try {
+            $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
+                "type" => "login",
+                "clientid" => $clientid,
+                "sessid" => $sessid
+            )));
+            $userdata = json_decode($userdata)
+            if ($userdata['type'] === 'error') {
+                return 0;
+            }
+            $output = 1;
+            $_SESSION['sid_sessid'] = $userdata['requested_data'][0];
+            $_SESSION['sid_pid'] = $userdata['requested_data'][1];
+            $_SESSION['sid_nickname'] = strip_tags($userdata['requested_data'][2]);
 
-              return 1;
+            return 1;
 
-          } catch (\Exception $e) {
-              return -1;
-          }
+        } catch (\Exception $e) {
+            return -1;
+        }
       }
 
       // Information editor
@@ -257,34 +257,12 @@
       {
           ob_start();
           session_start();
-          if (empty($_SESSION['pid'])) {
+          if (empty($_SESSION['sid_sessid'])) {
               header('Location: '.$target);
               exit;
           }
 
           return 1;
-      }
-
-      private function checkExist(String $targetDB, String $targetName, $targetValue, String $valueType = 'string')
-      {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-
-          try {
-              if ($valueType = 'string') {
-                  $sql = "SELECT * FROM $targetDB WHERE $targetName = '$targetValue'";
-              } else {
-                  $sql = "SELECT * FROM $targetDB WHERE $targetName = $targetValue";
-              }
-              $sql = "SELECT * FROM $targetDB WHERE $targetName = '$targetValue'";
-              $result = $conn->query($sql);
-              if ($result->fetch_assoc()) {
-                  return 1;
-              } else {
-                  return 0;
-              }
-          } catch (\Exception $e) {
-              return -1;
-          }
       }
 
       public function passwordCheck(String $pw, String $pid)
@@ -331,17 +309,5 @@
           }
 
           return $profileImg;
-      }
-
-      private function generateRenStr($length)
-      {
-          $character = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-          $rendom_str = '';
-          $loopNum = $length;
-          while ($loopNum--) {
-              $rendom_str .= $character[mt_rand(0, strlen($character) - 1)];
-          }
-
-          return $rendom_str;
       }
   }
