@@ -208,50 +208,6 @@
         }
       }
 
-      // Information editor
-      public function passwordEdit(String $pw, String $pwr, String $pid)
-      {
-          if (!$pw) {
-              return -1;
-              exit;
-          } elseif ($pw === $pwr) {
-              $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-              $pw = hash('sha256', $pw);
-              $pid = $_SESSION['pid'];
-
-              try {
-                  $sql = "UPDATE userdata SET pw='$pw' WHERE pid='$pid'";
-                  $conn->query($sql);
-              } catch (\Exception $e) {
-                  return -1;
-              }
-
-              return 1;
-          } else {
-              return 0;
-              exit;
-          }
-      }
-
-      public function infoEdit(String $nickname, String $currentNickname, String $pid)
-      {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-          $nickname = $conn->real_escape_string($nickname);
-          if ($nickname === $currentNickname || $nickname === '') {
-              return 0;
-          }
-
-          try {
-              $sql = "UPDATE userdata SET nickname='$nickname' WHERE pid='$pid'";
-              $conn->query($sql);
-          } catch (\Exception $e) {
-              return -1;
-          }
-          $_SESSION['nickname'] = $nickname;
-
-          return 1;
-      }
-
       // Editional checking functions
       public function loginCheck($target)
       {
