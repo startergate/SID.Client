@@ -162,28 +162,6 @@
           }
       }
 
-      // Auto login cookie functions
-      public function loginCookie($pw, $pid, $locater)
-      {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-          unset($_COOKIE['sidAutorizeRikka']);
-          unset($_COOKIE['sidAutorizeYuuta']);
-          $pid = $conn->real_escape_string($pid);
-          $cookie_raw = $this->generateRenStr(10);
-          $cookie_data = hash('sha256', $pw);
-
-          try {
-              $sql = "UPDATE userdata SET autorize_tag='$cookie_raw' WHERE pid = '$pid'";
-              $conn->query($sql);
-          } catch (\Exception $e) {
-              return -1;
-          }
-          $cookieTest1 = setcookie('sidAutorizeRikka', $cookie_raw, time() + 86400 * 30, $locater);
-          $cookieTest2 = setcookie('sidAutorizeYuuta', $cookie_data, time() + 86400 * 30, $locater);
-
-          return $cookieTest1 && $cookieTest2;
-      }
-
       public function authCheck($clientid, $sessid)
       {
         try {
