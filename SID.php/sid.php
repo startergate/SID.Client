@@ -289,25 +289,4 @@
       {
           return $this->$clientName;
       }
-
-      public function profileGet($pid, $locater)
-      {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-          $row;
-
-          try {
-              $sql = "SELECT profile_img FROM userdata WHERE pid LIKE '".$pid."'";
-              $result = $conn->query($sql);
-              $row = $result->fetch_assoc();
-          } catch (\Exception $e) {
-              return -1;
-          }
-          if (empty($row['profile_img'])) {
-              $profileImg = $locater.'/static/img/common/donotepfo.png';
-          } else {
-              $profileImg = $locater.'/static/img/common/profile/'.$_SESSION['pid'].'.'.$row['profile_img'];
-          }
-
-          return $profileImg;
-      }
   }
