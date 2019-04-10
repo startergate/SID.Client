@@ -221,23 +221,29 @@
           return 1;
       }
 
-      public function passwordCheck(String $pw, String $pid)
+      public function passwordCheck(String $clientid, String $sessid, String $pw)
       {
-          $conn = new mysqli('sid.donote.co', 'root', 'Wb4H9nn542', 'sid_userdata');
-          $pw = hash('sha256', $pw);
+        try {
+            $userdata = curlPost('http://localhost:3000/api/verify/', json_encode(array(
+                "type" => "verify",
+                "data" => "password",
+                "clientid" => $clientid,
+                "sessid" => $sessid,
+                "value" => $pw
+            )));
+            $userdata = json_decode($userdata)
+            if ($userdata['type'] === 'error') {
+                return 0;
+            }
+            if ($userdata['is_vaild'] === true) {
+                return 1;
+            }
 
-          try {
-              $sql = "SELECT pw FROM userdata WHERE pid LIKE '$pid'";	//user data select
-              $result = $conn->query($sql);
-              $row = $result->fetch_assoc();
-              if ($pw === $row['pw']) {
-                  return 1;
-              } else {
-                  return 0;
-              }
-          } catch (\Exception $e) {
-              return -1;
-          }
+            return 0;
+
+        } catch (\Exception $e) {
+            return -1;
+        }
       }
 
       // Editional Etc functions
