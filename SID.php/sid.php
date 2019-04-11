@@ -69,7 +69,7 @@
       public function login($clientid, $id, $pw)
       {
           try {
-              $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
+              $userdata = curlPost('http://sid.donote.co:3000/api/login', json_encode(array(
                   "type" => "login",
                   "clientid" => $clientid,
                   "userid" => $id,
@@ -95,7 +95,7 @@
 
       public function logout($clientid, $sessid)
       {
-          $userdata = curlPost('http://localhost:3000/api/logout', json_encode(array(
+          $userdata = curlPost('http://sid.donote.co:3000/api/logout', json_encode(array(
               "type" => "logout",
               "clientid" => $clientid,
               "sessid" => $sessid
@@ -119,7 +119,7 @@
       public function register(String $id, String $pw, String $nickname = 'User')
       {
           try {
-              $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
+              $userdata = curlPost('http://sid.donote.co:3000/api/login', json_encode(array(
                   "type" => "register",
                   "clientid" => $clientid,
                   "userid" => $id,
@@ -143,7 +143,7 @@
       public function getUserNickname($clientid, $sessid)
       {
           try {
-              $userdata = curlPost('http://localhost:3000/api/get/usname', json_encode(array(
+              $userdata = curlPost('http://sid.donote.co:3000/api/get/usname', json_encode(array(
                   "type" => "get",
                   "data" => 'usname',
                   "clientid" => $clientid,
@@ -165,7 +165,7 @@
       public function authCheck($clientid, $sessid)
       {
         try {
-            $userdata = curlPost('http://localhost:3000/api/login', json_encode(array(
+            $userdata = curlPost('http://sid.donote.co:3000/api/login', json_encode(array(
                 "type" => "login",
                 "clientid" => $clientid,
                 "sessid" => $sessid
@@ -202,7 +202,7 @@
       public function passwordCheck(String $clientid, String $sessid, String $pw)
       {
         try {
-            $userdata = curlPost('http://localhost:3000/api/verify/', json_encode(array(
+            $userdata = curlPost('http://sid.donote.co:3000/api/verify/', json_encode(array(
                 "type" => "verify",
                 "data" => "password",
                 "clientid" => $clientid,
