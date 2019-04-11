@@ -14,8 +14,23 @@ class SID {
 
   }
   createClientID(devicedata) {
-
+    $.ajax({
+      url: 'http://sid.donote.co:3000/api/create/clientid',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        'type': 'create',
+        'data': 'clientid',
+        'devicedata': devicedata
+      },
+      success: (data) => {
+        this.indexedDBCreater({
+          'sid_clientid': requested_data
+        });
+      }
+    });
   }
+
   indexedDBCreater(data) {
 
   }
