@@ -55,6 +55,7 @@
           if (func_get_args()) {
               $this->clientName = func_get_args()[0];
 
+              session_start();
               return;
           } else {
               SID::__destruct()
@@ -190,7 +191,6 @@
       public function loginCheck($target)
       {
           ob_start();
-          session_start();
           if (empty($_SESSION['sid_sessid'])) {
               header('Location: '.$target);
               exit;
@@ -209,6 +209,7 @@
                 "sessid" => $sessid,
                 "value" => $pw
             )));
+
             $userdata = json_decode($userdata)
             if ($userdata['type'] === 'error') {
                 return 0;
@@ -218,7 +219,6 @@
             }
 
             return 0;
-
         } catch (\Exception $e) {
             return -1;
         }
