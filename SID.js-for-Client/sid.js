@@ -13,6 +13,7 @@ class SID {
   getProfile(sessid) {
 
   }
+
   createClientID(devicedata) {
     $.ajax({
       url: 'http://sid.donote.co:3000/api/create/clientid',
@@ -24,6 +25,7 @@ class SID {
         'devicedata': devicedata
       },
       success: (data) => {
+        data = JSON.parse(data);
         this.indexedDBCreater({
           'sid_clientid': requested_data
         });
