@@ -10,8 +10,22 @@ class SID {
     }
     this.clientname = clientname;
   }
-  getProfile(sessid) {
-
+  getProfile(clientid, sessid) {
+    $.ajax({
+      url: 'http://sid.donote.co:3000/api/get/pfimg',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        'type': 'get',
+        'data': 'pfimg',
+        'clientid': clientid,
+        'sessid': sessid
+      },
+      success: (data) => {
+        data = JSON.parse(data);
+        dosomething(data.requested_data);
+      }
+    });
   }
 
   createClientID(devicedata) {
@@ -33,7 +47,7 @@ class SID {
     });
   }
 
-  indexedDBCreater(data) {
+  indexedDBModifier(data, mod = 'create') {
 
   }
 }
