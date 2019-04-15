@@ -48,6 +48,20 @@ class SID {
   }
 
   indexedDBModifier(data, mod = 'create') {
-
+    var db;
+    var request = indexedDB.open('SID_LOCALSTORE');
+    request.onerror = event => {
+      alert('Error happened in SID.js. Please reload this page.');
+      console.log("Error: " + event.target.errorCode);
+    };
+    request.onsuccess = function(event) {
+      db = request.result;
+    };
+    db.onerror = function(event) {
+      alert("Database error: " + event.target.errorCode);
+    };
+    db.createObjectStore('clientdb', {
+      keypath: 'ssn'
+    });
   }
 }
