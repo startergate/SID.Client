@@ -5,7 +5,10 @@ class SID {
     if (typeof jQuery == 'undefined') {
       throw new Error("SID.js for Client requires jQuery");
     }
-    if (navigator.userAgent.indexOf('MSIE') !== -1 || info.indexOf('Trident') !== -1) { //Client Browser Detection
+    if (!window.localStorage) {
+      throw new Error("SID.js for Client requires Local Storage support in browser");
+    }
+    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.userAgent.indexOf('Trident') !== -1) { //Client Browser Detection
       throw new Error("SID.js for Client don't support IE");
     }
     this.clientname = clientname;
@@ -40,28 +43,9 @@ class SID {
       },
       success: (data) => {
         data = JSON.parse(data);
-        this.indexedDBCreater({
-          'sid_clientid': requested_data
-        });
+        localStorage.sid_clientid = data.response_data;
       }
     });
   }
 
-  indexedDBModifier(data, mod = 'create') {
-    var db;
-    var request = indexedDB.open('SID_LOCALSTORE');
-    request.onerror = event => {
-      alert('Error happened in SID.js. Please reload this page.');
-      console.log("Error: " + event.target.errorCode);
-    };
-    request.onsuccess = function(event) {
-      db = request.result;
-    };
-    db.onerror = function(event) {
-      alert("Database error: " + event.target.errorCode);
-    };
-    db.createObjectStore('clientdb', {
-      keypath: 'ssn'
-    });
-  }
 }
