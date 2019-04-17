@@ -58,7 +58,7 @@
               session_start();
               return;
           } else {
-              SID::__destruct()
+              SID::__destruct();
           }
       }
 
@@ -78,7 +78,7 @@
                   "isPermanent" => $isPermanent,
                   "isWeb" => true
               )));
-              $userdata = json_decode($userdata)
+              $userdata = json_decode($userdata);
               if ($userdata['type'] === 'error') {
                   return 0;
               }
@@ -88,7 +88,6 @@
               $_SESSION['sid_nickname'] = strip_tags($userdata['requested_data'][2]);
 
               return 1;
-
           } catch (\Exception $e) {
               return -1;
           }
@@ -101,7 +100,7 @@
               "clientid" => $clientid,
               "sessid" => $sessid
           )));
-          $userdata = json_decode($userdata)
+          $userdata = json_decode($userdata);
           if ($userdata['type'] === 'error') {
               return 0;
           }
@@ -127,7 +126,7 @@
                   "nickname" => $nickname,
                   "password" => $pw
               )));
-              $userdata = json_decode($userdata)
+              $userdata = json_decode($userdata);
               if ($userdata['type'] === 'error') {
                   return 0;
               }
@@ -150,7 +149,7 @@
                   "clientid" => $clientid,
                   "sessid" => $sessid
               )));
-              $userdata = json_decode($userdata)
+              $userdata = json_decode($userdata);
               if ($userdata['type'] === 'error') {
                   return '';
               }
@@ -165,26 +164,25 @@
 
       public function authCheck($clientid, $sessid)
       {
-        try {
-            $userdata = curlPost('http://sid.donote.co:3000/api/login', json_encode(array(
+          try {
+              $userdata = curlPost('http://sid.donote.co:3000/api/login', json_encode(array(
                 "type" => "login",
                 "clientid" => $clientid,
                 "sessid" => $sessid
             )));
-            $userdata = json_decode($userdata)
-            if ($userdata['type'] === 'error') {
-                return 0;
-            }
-            $output = 1;
-            $_SESSION['sid_sessid'] = $userdata['requested_data'][0];
-            $_SESSION['sid_pid'] = $userdata['requested_data'][1];
-            $_SESSION['sid_nickname'] = strip_tags($userdata['requested_data'][2]);
+              $userdata = json_decode($userdata);
+              if ($userdata['type'] === 'error') {
+                  return 0;
+              }
+              $output = 1;
+              $_SESSION['sid_sessid'] = $userdata['requested_data'][0];
+              $_SESSION['sid_pid'] = $userdata['requested_data'][1];
+              $_SESSION['sid_nickname'] = strip_tags($userdata['requested_data'][2]);
 
-            return 1;
-
-        } catch (\Exception $e) {
-            return -1;
-        }
+              return 1;
+          } catch (\Exception $e) {
+              return -1;
+          }
       }
 
       // Editional checking functions
@@ -201,8 +199,8 @@
 
       public function passwordCheck(String $clientid, String $sessid, String $pw)
       {
-        try {
-            $userdata = curlPost('http://sid.donote.co:3000/api/verify/', json_encode(array(
+          try {
+              $userdata = curlPost('http://sid.donote.co:3000/api/verify/', json_encode(array(
                 "type" => "verify",
                 "data" => "password",
                 "clientid" => $clientid,
@@ -210,18 +208,18 @@
                 "value" => $pw
             )));
 
-            $userdata = json_decode($userdata)
-            if ($userdata['type'] === 'error') {
-                return 0;
-            }
-            if ($userdata['is_vaild'] === true) {
-                return 1;
-            }
+              $userdata = json_decode($userdata);
+              if ($userdata['type'] === 'error') {
+                  return 0;
+              }
+              if ($userdata['is_vaild'] === true) {
+                  return 1;
+              }
 
-            return 0;
-        } catch (\Exception $e) {
-            return -1;
-        }
+              return 0;
+          } catch (\Exception $e) {
+              return -1;
+          }
       }
 
       // Editional Etc functions
