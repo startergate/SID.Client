@@ -65,14 +65,11 @@ Json::Value SIDCpp::curlPost(std::string url, std::string data, std::string meth
 		res = curl_easy_perform(curl);
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
 		curl_easy_cleanup(curl);
-		if (httpCode == 200)
-		{
-			Json::Value data;
-			Json::Reader reader;
-			reader.parse(httpData.get()->c_str(), data);
+		Json::Value data;
+		Json::Reader reader;
+		reader.parse(httpData.get()->c_str(), data);
 
-			return data;
-		}
+		return data;
 	}
 	Json::Value error;
 	error["error"] = 1;
@@ -92,7 +89,7 @@ Json::Value SIDCpp::login(std::string clientid, std::string id, std::string pw) 
 	senddata["clientid"] = clientid;
 	senddata["userid"] = id;
 	senddata["password"] = pw;
-	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(userdata));
+	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata));
 
 	return userdata;
 }
@@ -104,7 +101,7 @@ Json::Value SIDCpp::createClientID(std::string devicedata) {
 	senddata["data"] = "clientid";
 	senddata["devicedata"] = devicedata;
 	
-	Json::Value received = this->curlPost("http://sid.donote.co:3000/api/clientid", writer.write(senddata));
+	Json::Value received = this->curlPost("http://sid.donote.co/api/clientid", writer.write(senddata));
 
 	return received;
 }
