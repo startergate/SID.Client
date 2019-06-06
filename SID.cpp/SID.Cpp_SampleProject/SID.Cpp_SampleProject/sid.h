@@ -33,7 +33,8 @@ public:
 
 	~SIDCpp();
 
-	int login(std::string clientid, std::string id, std::string pw);
+	Json::Value login(std::string clientid, std::string id, std::string pw);
+	Json::Value createClientID(std::string devicedata);
 };
 
 Json::Value SIDCpp::curlPost(std::string url, std::string data, std::string method) {
@@ -84,7 +85,7 @@ SIDCpp::SIDCpp(std::string clientName) {
 
 SIDCpp::~SIDCpp() {}
 
-int SIDCpp::login(std::string clientid, std::string id, std::string pw) {
+Json::Value SIDCpp::login(std::string clientid, std::string id, std::string pw) {
 	Json::Value senddata;
 	Json::FastWriter writer;
 	senddata["type"] = "login";
@@ -92,5 +93,18 @@ int SIDCpp::login(std::string clientid, std::string id, std::string pw) {
 	senddata["userid"] = id;
 	senddata["password"] = pw;
 	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(userdata));
+
 	return userdata;
+}
+
+Json::Value SIDCpp::createClientID(std::string devicedata) {
+	Json::Value senddata;
+	Json::FastWriter writer;
+	senddata["type"] = "create";
+	senddata["data"] = "clientid";
+	senddata["devicedata"] = devicedata;
+	
+	Json::Value received = this->curlPost("http://sid.donote.co:3000/api/clientid", writer.write(senddata));
+
+	return received;
 }
