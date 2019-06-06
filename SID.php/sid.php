@@ -75,7 +75,7 @@
               if ($userdata->type === 'error') {
                   return 0;
               }
-              $output = 1;
+
               $_SESSION['sid_sessid'] = $userdata->response_data[0];
               $_SESSION['sid_pid'] = $userdata->response_data[1];
               $_SESSION['sid_nickname'] = strip_tags($userdata->response_data[2]);
