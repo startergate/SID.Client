@@ -38,6 +38,7 @@ public:
 	Json::Value login(std::string clientid, std::string id, std::string pw);
 	int logout(std::string clientid, std::string sessid);
 	std::string getUserNickname(std::string cilentid, std::string sessid);
+	// int passwordCheck(std::string clientid, std::string sessid, std::string pw);
 	Json::Value createClientID(std::string devicedata);
 };
 
@@ -166,6 +167,24 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 		return "";
 	}
 }
+
+
+/*int SIDCpp::passwordCheck(std::string clientid, std::string sessid, std::string pw) {
+	Json::FastWriter writer;
+	Json::Value senddata;
+	senddata["type"] = "verify";
+	senddata["data"] = "password";
+	senddata["clientid"] = clientid;
+	senddata["sessid"] = sessid;
+	senddata["value"] = pw;
+	
+	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/password/verify", writer.write(senddata));
+	if (userdata["type"].asCString() == "error")
+		return 0;
+	if (!userdata["is_vaild"].asBool()) {
+		return 0;
+	}
+}*/
 
 Json::Value SIDCpp::createClientID(std::string devicedata) {
 	Json::Value senddata;
