@@ -7,6 +7,7 @@
 #include "json/writer.h"
 #include "curl/curl.h"
 #include <string>
+// #include <iostream>
 
 namespace
 {
@@ -35,6 +36,7 @@ public:
 
 	Json::Value login(std::string clientid, std::string id, std::string pw);
 	int logout(std::string clientid, std::string sessid);
+	std::string getUserNickname(std::string cilentid, std::string sessid);
 	Json::Value createClientID(std::string devicedata);
 };
 
@@ -49,7 +51,6 @@ Json::Value SIDCpp::curlPost(std::string url, std::string data, std::string meth
 
 	curl = curl_easy_init();
 	if (curl) {
-		std::cout << method << std::endl << std::endl << std::endl << std::endl << std::endl;
 		struct curl_slist *chunk = NULL;
 		curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -62,7 +63,7 @@ Json::Value SIDCpp::curlPost(std::string url, std::string data, std::string meth
 		chunk = curl_slist_append(chunk, "Accept: application/json");
 		chunk = curl_slist_append(chunk, "Content-Type: application/json");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
+		//curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
 
 		res = curl_easy_perform(curl);
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
@@ -112,6 +113,25 @@ int SIDCpp::logout(std::string clientid, std::string sessid) {
 	}
 
 	return 1;
+}
+
+std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
+	std::string url = "http://sid.donote.co:3000/api/";
+	url.append(clientid).append("/").append(sessid).append("/usname");
+	try
+	{
+		Json::Value userdata = this->curlPost(url, "", "GET");
+		if (userdata["type"].asCString() == "error")
+			return "";
+		if (!userdata["is_vaild"].asBool()) {
+			return "";
+		}
+		return userdata["response_data"].asString();
+	}
+	catch (const std::exception&)
+	{
+		return "";
+	}
 }
 
 Json::Value SIDCpp::createClientID(std::string devicedata) {
