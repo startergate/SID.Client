@@ -34,6 +34,7 @@ public:
 	~SIDCpp();
 
 	Json::Value login(std::string clientid, std::string id, std::string pw);
+	int logout(std::string clientid, std::string sessid);
 	Json::Value createClientID(std::string devicedata);
 };
 
@@ -48,6 +49,7 @@ Json::Value SIDCpp::curlPost(std::string url, std::string data, std::string meth
 
 	curl = curl_easy_init();
 	if (curl) {
+		std::cout << method << std::endl << std::endl << std::endl << std::endl << std::endl;
 		struct curl_slist *chunk = NULL;
 		curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -94,6 +96,24 @@ Json::Value SIDCpp::login(std::string clientid, std::string id, std::string pw) 
 	return userdata;
 }
 
+int SIDCpp::logout(std::string clientid, std::string sessid) {
+	Json::Value senddata;
+	Json::FastWriter writer;
+	senddata["type"] = "logout";
+	senddata["clientid"] = clientid;
+	senddata["sessid"] = sessid;
+
+	Json::Value result = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata), "DELETE");
+	if (result["type"].asString().compare("error")) {
+		return 0;
+	}
+	if (!result["is_succeed"].asBool()) {
+		return 0;
+	}
+
+	return 1;
+}
+
 Json::Value SIDCpp::createClientID(std::string devicedata) {
 	Json::Value senddata;
 	Json::FastWriter writer;
@@ -101,7 +121,7 @@ Json::Value SIDCpp::createClientID(std::string devicedata) {
 	senddata["data"] = "clientid";
 	senddata["devicedata"] = devicedata;
 	
-	Json::Value received = this->curlPost("http://sid.donote.co/api/clientid", writer.write(senddata));
+	Json::Value received = this->curlPost("http://sid.donote.co:3000/api/clientid", writer.write(senddata));
 
 	return received;
 }

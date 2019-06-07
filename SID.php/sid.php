@@ -99,7 +99,7 @@
               'sessid'   => $sessid,
           ]), 'DELETE');
           $userdata = json_decode($userdata);
-          if ($userdat->type === 'error') {
+          if ($userdata->type === 'error') {
               return 0;
           }
           if (!$userdata->is_succeed) {
