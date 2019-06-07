@@ -13,7 +13,7 @@ int main() {
 	std::string clientid = sid->createClientID("Windows CPP")["response_data"].asString();
 	cout << clientid << endl;
 	Json::Value value = sid->login(clientid, id, pw);
-	string sessid = value["response_data"][0].asString();
+	string sessid = value["sessid"].asString();
 	cout << "Logged In." << endl;
 	cout << "Your Session ID is: " << sessid << endl << endl;
 

@@ -93,8 +93,12 @@ Json::Value SIDCpp::login(std::string clientid, std::string id, std::string pw) 
 	senddata["userid"] = id;
 	senddata["password"] = pw;
 	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata));
-
-	return userdata;
+	Json::Value output;
+	output["sessid"] = userdata["response_data"][0].asCString();
+	output["pid"] = userdata["response_data"][1].asCString();
+	output["nickname"] = userdata["response_data"][2].asCString();
+	output["expire"] = userdata["response_data"][3].asCString();
+	return output;
 }
 
 int SIDCpp::logout(std::string clientid, std::string sessid) {
