@@ -34,10 +34,10 @@ public:
 
 	~SIDCpp();
 
+	Json::Value login(std::string clientid, std::string sessid);
 	Json::Value login(std::string clientid, std::string id, std::string pw);
 	int logout(std::string clientid, std::string sessid);
 	std::string getUserNickname(std::string cilentid, std::string sessid);
-	Json::Value authCheck(std::string clientid, std::string sessid);
 	Json::Value createClientID(std::string devicedata);
 };
 
@@ -85,6 +85,34 @@ SIDCpp::SIDCpp(std::string clientName) {
 }
 
 SIDCpp::~SIDCpp() {}
+
+Json::Value SIDCpp::login(std::string clientid, std::string sessid) {
+	try
+	{
+		Json::FastWriter writer;
+		Json::Value senddata;
+		senddata["type"] = "login";
+		senddata["clientid"] = clientid;
+		senddata["sessid"] = sessid;
+		Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata));
+		if (userdata["type"].asCString() == "error")
+		{
+			throw new std::exception;
+		}
+		Json::Value output;
+		output["sessid"] = userdata["response_data"][0].asCString();
+		output["pid"] = userdata["response_data"][1].asCString();
+		output["nickname"] = userdata["response_data"][2].asCString();
+		output["expire"] = userdata["response_data"][3].asCString();
+		return output;
+	}
+	catch (const std::exception&)
+	{
+		Json::Value error;
+		error["error"] = 1;
+		return error;
+	}
+}
 
 Json::Value SIDCpp::login(std::string clientid, std::string id, std::string pw) {
 	Json::Value senddata;
@@ -136,28 +164,6 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 	catch (const std::exception&)
 	{
 		return "";
-	}
-}
-
-Json::Value SIDCpp::authCheck(std::string clientid, std::string sessid) {
-	try
-	{
-		Json::FastWriter writer;
-		Json::Value senddata;
-		senddata["type"] = "login";
-		senddata["clientid"] = clientid;
-		senddata["sessid"] = sessid;
-		Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata));
-		if (userdata["type"].asCString() == "error")
-		{
-			throw new std::exception;
-		}
-	}
-	catch (const std::exception&)
-	{
-		Json::Value error;
-		error["error"] = 1;
-		return error;
 	}
 }
 
