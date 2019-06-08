@@ -9,6 +9,9 @@
 #include <string>
 // #include <iostream>
 
+#ifndef __SID_H__
+#define __SID_H__
+
 namespace
 {
 	std::size_t callback(
@@ -39,7 +42,7 @@ public:
 	int logout(std::string clientid, std::string sessid);
 	std::string getUserNickname(std::string cilentid, std::string sessid);
 	// int passwordCheck(std::string clientid, std::string sessid, std::string pw);
-	Json::Value createClientID(std::string devicedata);
+	std::string createClientID(std::string devicedata);
 };
 
 Json::Value SIDCpp::curlPost(std::string url, std::string data, std::string method) {
@@ -177,7 +180,7 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 	senddata["clientid"] = clientid;
 	senddata["sessid"] = sessid;
 	senddata["value"] = pw;
-	
+
 	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/password/verify", writer.write(senddata));
 	if (userdata["type"].asCString() == "error")
 		return 0;
@@ -186,14 +189,16 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 	}
 }*/
 
-Json::Value SIDCpp::createClientID(std::string devicedata) {
+std::string SIDCpp::createClientID(std::string devicedata) {
 	Json::Value senddata;
 	Json::FastWriter writer;
 	senddata["type"] = "create";
 	senddata["data"] = "clientid";
 	senddata["devicedata"] = devicedata;
-	
+
 	Json::Value received = this->curlPost("http://sid.donote.co:3000/api/clientid", writer.write(senddata));
 
-	return received;
+	return received["response_data"].asCString();
 }
+
+#endif

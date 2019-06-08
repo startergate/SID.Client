@@ -10,7 +10,7 @@ int main() {
 	cin >> id;
 	cout << "PASSWORD: ";
 	cin >> pw;
-	std::string clientid = sid->createClientID("Windows CPP")["response_data"].asString();
+	std::string clientid = sid->createClientID("Windows CPP");
 	cout << clientid << endl;
 	Json::Value value = sid->login(clientid, id, pw);
 	string sessid = value["sessid"].asString();
