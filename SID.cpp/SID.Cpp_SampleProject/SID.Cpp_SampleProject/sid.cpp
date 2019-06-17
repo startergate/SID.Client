@@ -52,7 +52,7 @@ Json::Value SIDCpp::login(std::string clientid, std::string sessid) {
 		senddata["type"] = "login";
 		senddata["clientid"] = clientid;
 		senddata["sessid"] = sessid;
-		Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata));
+		Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/v1/session", writer.write(senddata));
 		if (userdata["type"].asCString() == "error") throw new std::exception;
 		Json::Value output;
 		output["sessid"] = userdata["response_data"][0].asCString();
@@ -76,7 +76,7 @@ Json::Value SIDCpp::login(std::string clientid, std::string id, std::string pw) 
 	senddata["clientid"] = clientid;
 	senddata["userid"] = id;
 	senddata["password"] = pw;
-	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata));
+	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/v1/session", writer.write(senddata));
 	if (userdata["type"].asCString() == "error") throw new std::exception;
 	Json::Value output;
 	output["sessid"] = userdata["response_data"][0].asCString();
@@ -93,7 +93,7 @@ int SIDCpp::logout(std::string clientid, std::string sessid) {
 	senddata["clientid"] = clientid;
 	senddata["sessid"] = sessid;
 
-	Json::Value result = this->curlPost("http://sid.donote.co:3000/api/session", writer.write(senddata), "DELETE");
+	Json::Value result = this->curlPost("http://sid.donote.co:3000/api/v1/session", writer.write(senddata), "DELETE");
 	if (result["type"].asString().compare("error")) return 0;
 	if (!result["is_succeed"].asBool()) return 0;
 
@@ -101,7 +101,7 @@ int SIDCpp::logout(std::string clientid, std::string sessid) {
 }
 
 std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
-	std::string url = "http://sid.donote.co:3000/api/";
+	std::string url = "http://sid.donote.co:3000/api/v1/";
 	url.append(clientid).append("/").append(sessid).append("/usname");
 	try
 	{
@@ -126,7 +126,7 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 	senddata["sessid"] = sessid;
 	senddata["value"] = pw;
 
-	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/password/verify", writer.write(senddata));
+	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/v1/password/verify", writer.write(senddata));
 	if (userdata["type"].asCString() == "error")
 		return 0;
 	if (!userdata["is_vaild"].asBool()) {
@@ -141,7 +141,7 @@ std::string SIDCpp::createClientID(std::string devicedata) {
 	senddata["data"] = "clientid";
 	senddata["devicedata"] = devicedata;
 
-	Json::Value received = this->curlPost("http://sid.donote.co:3000/api/clientid", writer.write(senddata));
+	Json::Value received = this->curlPost("http://sid.donote.co:3000/api/v1/clientid", writer.write(senddata));
 
 	return received["response_data"].asCString();
 }
