@@ -4,11 +4,11 @@ const request = require('request');
 
 class SID {
   constructor() {
-
+    this.clientName = clientName;
   }
 
   login() {
-
+    request.
   }
 
   logout() {
