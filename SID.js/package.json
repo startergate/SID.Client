@@ -1,5 +1,5 @@
 {
-  "name": "sid.js",
+  "name": "sid",
   "version": "0.0.1",
   "description": "SID.js",
   "main": "index.js",
@@ -13,6 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "request": "^2.88.0"
+  "axios": "^0.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/startergate/SID.Client.git"
   }
 }
