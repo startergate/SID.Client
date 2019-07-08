@@ -77,21 +77,30 @@ class SID {
           });
         }
 
-        resolve({
-          error: 0
-        });
+        resolve();
       });
     });
   }
 
   register(clientid, id, pw, nickname = 'User') {
-    this.sidServerInstance.post('/user/', {
+    return this.sidServerInstance.post('/user/', {
       type: 'register',
       clientid: clientid,
       userid: userid,
       nickname: nickname,
       password: pw
-    }).then(response => {});
+    }).then(response => {
+      let resData = JSON.parse(response.data);
+      return Promise((resolve, reject) => {
+        if (resData.type === 'error' || !resData.is_succeed) {
+          reject({
+            error: 1
+          });
+        }
+
+        resolve(resData.private_id);
+      });
+    });
   }
 
   getUserNickname(clientid, sessid) {
