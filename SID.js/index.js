@@ -52,20 +52,18 @@ class SID {
   }
 
   getUserNickname(clientid, sessid) {
-    this.sidServerInstance.post('/session/', {
-
-    }).then(response => {});
+    this.sidServerInstance.get(`/${clientid}/${sessid}/usname`).then(response => {});
   }
 
-  loginCheck(target) {
-    this.sidServerInstance.post('/session/', {
-
-    }).then(response => {});
-  }
+  loginCheck(target) {}
 
   passwordCheck(clientid, sessid, pw) {
-    this.sidServerInstance.post('/session/', {
-
+    this.sidServerInstance.post('/password/verify', {
+      type: 'verify',
+      data: 'password',
+      clientid: clientid,
+      sessid: sessid,
+      value: pw
     }).then(response => {});
   }
 
