@@ -29,6 +29,7 @@ class SID {
           reject({
             error: 1
           });
+          return;
         }
 
         output.sessid = resData.response_data[0];
@@ -52,6 +53,7 @@ class SID {
           reject({
             error: 1
           });
+          return;
         }
 
         output.sessid = resData.response_data[0];
@@ -75,6 +77,7 @@ class SID {
           reject({
             error: 1
           });
+          return;
         }
 
         resolve();
@@ -96,6 +99,7 @@ class SID {
           reject({
             error: 1
           });
+          return;
         }
 
         resolve(resData.private_id);
@@ -104,19 +108,67 @@ class SID {
   }
 
   getUserNickname(clientid, sessid) {
-    this.sidServerInstance.get(`/${clientid}/${sessid}/usname`).then(response => {});
+    return this.sidServerInstance.get(`/${clientid}/${sessid}/usname`).then(response => {
+      let resData = JSON.parse(response.data);
+      return Promise((resolve, reject) => {
+        if (resData.type === 'error') {
+          reject({
+            error: 1
+          });
+          return;
+        }
+        if (!resData.is_vaild) {
+          resolve('');
+          return;
+        }
+
+        resolve(resData.response_data);
+      });
+    });
   }
 
   loginCheck(target) {}
 
   passwordCheck(clientid, sessid, pw) {
-    this.sidServerInstance.post('/password/verify', {
+    return this.sidServerInstance.post('/password/verify', {
       type: 'verify',
       data: 'password',
       clientid: clientid,
       sessid: sessid,
       value: pw
-    }).then(response => {});
+    }).then(response => {
+      let resData = JSON.parse(response.data);
+      return Promise((resolve, reject) => {
+        if (resData.type === 'error' || !resData.is_vaild) {
+          reject({
+            error: 1
+          });
+          return;
+        }
+
+        resolve(true);
+      });
+    });
+  }
+
+  createClientID(devicedata) {
+    return this.sidServerInstance.post('/clientid', {
+      type: 'create',
+      data: 'clientid',
+      devicedata: devicedata
+    }).then(response => {
+      let resData = JSON.parse(response.data);
+      return Promise((resolve, reject) => {
+        if (resData.type === 'error' || !resData.is_vaild) {
+          reject({
+            error: 1
+          });
+          return;
+        }
+
+        resolve(true);
+      });
+    });
   }
 
   getClientName() {
