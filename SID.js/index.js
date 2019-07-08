@@ -159,14 +159,7 @@ class SID {
     }).then(response => {
       let resData = JSON.parse(response.data);
       return Promise((resolve, reject) => {
-        if (resData.type === 'error' || !resData.is_vaild) {
-          reject({
-            error: 1
-          });
-          return;
-        }
-
-        resolve(true);
+        resolve(resData.response_data);
       });
     });
   }
