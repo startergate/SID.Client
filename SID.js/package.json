@@ -1,5 +1,5 @@
 {
-  "name": "sid",
+  "name": "@startergate/sidjs",
   "version": "0.0.1",
   "description": "SID.js",
   "main": "index.js",
