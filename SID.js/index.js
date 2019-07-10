@@ -164,6 +164,10 @@ class SID {
     });
   }
 
+  setClientName(clientName) {
+    this.clientName = clientName;
+  }
+
   getClientName() {
     return this.clientName;
   }
