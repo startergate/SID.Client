@@ -1,6 +1,6 @@
 {
   "name": "@startergate/sidjs",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "SID.js",
   "main": "index.js",
   "scripts": {

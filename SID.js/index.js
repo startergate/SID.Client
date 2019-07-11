@@ -23,15 +23,15 @@ class SID {
       isPermanent: false,
       isWeb: true
     }).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         if (resData.type === 'error') {
           reject({
             error: 1
           });
           return;
         }
-
+        var output = {};
         output.sessid = resData.response_data[0];
         output.pid = resData.response_data[1];
         output.nickname = resData.response_data[2];
@@ -47,8 +47,8 @@ class SID {
       clientid: clientid,
       sessid: sessid
     }).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         if (resData.type === 'error') {
           reject({
             error: 1
@@ -56,6 +56,7 @@ class SID {
           return;
         }
 
+        var output = {};
         output.sessid = resData.response_data[0];
         output.pid = resData.response_data[1];
         output.nickname = resData.response_data[2];
@@ -71,8 +72,8 @@ class SID {
       clientid: clientid,
       sessid: sessid
     }).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         if (resData.type === 'error' || !resData.is_succeed) {
           reject({
             error: 1
@@ -93,8 +94,8 @@ class SID {
       nickname: nickname,
       password: pw
     }).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         if (resData.type === 'error' || !resData.is_succeed) {
           reject({
             error: 1
@@ -109,8 +110,8 @@ class SID {
 
   getUserNickname(clientid, sessid) {
     return this.sidServerInstance.get(`/${clientid}/${sessid}/usname`).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         if (resData.type === 'error') {
           reject({
             error: 1
@@ -137,8 +138,8 @@ class SID {
       sessid: sessid,
       value: pw
     }).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         if (resData.type === 'error' || !resData.is_vaild) {
           reject({
             error: 1
@@ -157,8 +158,8 @@ class SID {
       data: 'clientid',
       devicedata: devicedata
     }).then(response => {
-      let resData = JSON.parse(response.data);
-      return Promise((resolve, reject) => {
+      let resData = response.data;
+      return new Promise((resolve, reject) => {
         resolve(resData.response_data);
       });
     });
