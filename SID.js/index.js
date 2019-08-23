@@ -1,34 +1,32 @@
-/*jshint esversion: 9 */
+/* jshint esversion: 9 */
 
 const axios = require('axios');
 
 class SID {
-  constructor(clientName) {
+  constructor (clientName) {
     this.clientName = clientName;
     this.sidServerInstance = axios.create({
       baseURL: 'http://sid.donote.co:3000/api/v1/',
       timeout: 3000,
       headers: {
-        'Host': 'sid.donote.co:3000'
+        Host: 'sid.donote.co:3000'
       }
     });
   }
 
-  login(clientid, id, pw) {
+  login (clientid, id, pw) {
     return this.sidServerInstance.post('/session/', {
       type: 'login',
-      clientid: clinetid,
+      clientid: clientid,
       userid: id,
       password: pw,
       isPermanent: false,
       isWeb: true
     }).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         if (resData.type === 'error') {
-          reject({
-            error: 1
-          });
+          reject(new Error('Input Data Error'));
           return;
         }
         var output = {};
@@ -41,22 +39,20 @@ class SID {
     });
   }
 
-  loginAuth(clientid, sessid) {
+  loginAuth (clientid, sessid) {
     return this.sidServerInstance.post('/session/', {
       type: 'login',
       clientid: clientid,
       sessid: sessid
     }).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         if (resData.type === 'error') {
-          reject({
-            error: 1
-          });
+          reject(new Error('Input Data Error'));
           return;
         }
 
-        var output = {};
+        const output = {};
         output.sessid = resData.response_data[0];
         output.pid = resData.response_data[1];
         output.nickname = resData.response_data[2];
@@ -66,18 +62,16 @@ class SID {
     });
   }
 
-  logout(clientid, sessid) {
+  logout (clientid, sessid) {
     return this.sidServerInstance.delete('/session/', {
       type: 'logout',
       clientid: clientid,
       sessid: sessid
     }).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         if (resData.type === 'error' || !resData.is_succeed) {
-          reject({
-            error: 1
-          });
+          reject(new Error('Input Data Error'));
           return;
         }
 
@@ -86,7 +80,7 @@ class SID {
     });
   }
 
-  register(clientid, id, pw, nickname = 'User') {
+  register (clientid, userid, pw, nickname = 'User') {
     return this.sidServerInstance.post('/user/', {
       type: 'register',
       clientid: clientid,
@@ -94,12 +88,10 @@ class SID {
       nickname: nickname,
       password: pw
     }).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         if (resData.type === 'error' || !resData.is_succeed) {
-          reject({
-            error: 1
-          });
+          reject(new Error('Input Data Error'));
           return;
         }
 
@@ -108,14 +100,12 @@ class SID {
     });
   }
 
-  getUserNickname(clientid, sessid) {
+  getUserNickname (clientid, sessid) {
     return this.sidServerInstance.get(`/${clientid}/${sessid}/usname`).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         if (resData.type === 'error') {
-          reject({
-            error: 1
-          });
+          reject(new Error('Input Data Error'));
           return;
         }
         if (!resData.is_vaild) {
@@ -128,9 +118,9 @@ class SID {
     });
   }
 
-  loginCheck(target) {}
+  loginCheck (target) {}
 
-  passwordCheck(clientid, sessid, pw) {
+  passwordCheck (clientid, sessid, pw) {
     return this.sidServerInstance.post('/password/verify', {
       type: 'verify',
       data: 'password',
@@ -138,12 +128,10 @@ class SID {
       sessid: sessid,
       value: pw
     }).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         if (resData.type === 'error' || !resData.is_vaild) {
-          reject({
-            error: 1
-          });
+          reject(new Error('Input Data Error'));
           return;
         }
 
@@ -152,24 +140,24 @@ class SID {
     });
   }
 
-  createClientID(devicedata) {
+  createClientID (devicedata) {
     return this.sidServerInstance.post('/clientid', {
       type: 'create',
       data: 'clientid',
       devicedata: devicedata
     }).then(response => {
-      let resData = response.data;
+      const resData = response.data;
       return new Promise((resolve, reject) => {
         resolve(resData.response_data);
       });
     });
   }
 
-  setClientName(clientName) {
+  setClientName (clientName) {
     this.clientName = clientName;
   }
 
-  getClientName() {
+  getClientName () {
     return this.clientName;
   }
 }
