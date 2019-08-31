@@ -108,7 +108,7 @@ class SID {
           reject(new Error('Input Data Error'));
           return;
         }
-        if (!resData.is_vaild) {
+        if (!resData.is_valid) {
           resolve('');
           return;
         }
@@ -130,7 +130,7 @@ class SID {
     }).then(response => {
       const resData = response.data;
       return new Promise((resolve, reject) => {
-        if (resData.type === 'error' || !resData.is_vaild) {
+        if (resData.type === 'error' || !resData.is_valid) {
           reject(new Error('Input Data Error'));
           return;
         }

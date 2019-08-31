@@ -107,7 +107,7 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 	{
 		Json::Value userdata = this->curlPost(url, "", "GET");
 		if (userdata["type"].asCString() == "error") return "";
-		if (!userdata["is_vaild"].asBool()) return "";
+		if (!userdata["is_valid"].asBool()) return "";
 		return userdata["response_data"].asString();
 	}
 	catch (const std::exception&)
@@ -129,7 +129,7 @@ std::string SIDCpp::getUserNickname(std::string clientid, std::string sessid) {
 	Json::Value userdata = this->curlPost("http://sid.donote.co:3000/api/v1/password/verify", writer.write(senddata));
 	if (userdata["type"].asCString() == "error")
 		return 0;
-	if (!userdata["is_vaild"].asBool()) {
+	if (!userdata["is_valid"].asBool()) {
 		return 0;
 	}
 }*/

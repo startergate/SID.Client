@@ -147,7 +147,7 @@
               if ($userdata->type === 'error') {
                   return '';
               }
-              if (!$userdata->is_vaild) {
+              if (!$userdata->is_valid) {
                   return '';
               }
 
@@ -211,7 +211,7 @@
               if ($userdata->type === 'error') {
                   return 0;
               }
-              if ($userdata->is_vaild === 'false') {
+              if ($userdata->is_valid === 'false') {
                   return 0;
               }
 
