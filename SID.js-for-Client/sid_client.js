@@ -73,15 +73,6 @@ class SID {
   }
 
   login(clientid, id, pw, callback) {
-    console.log({
-      'type': 'login',
-      'clientid': clientid,
-      'userid': id,
-      'password': pw,
-      'isPermanent': false,
-      'isWeb': true,
-      'isClient': true
-    });
     $.ajax({
       url: 'http://sid.donote.co:3000/api/v1/session/',
       type: 'POST',
